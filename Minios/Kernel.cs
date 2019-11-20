@@ -36,17 +36,48 @@ namespace Minios
                 {
                     var item = Board[i][i1];
 
-                    Console.SetCursorPosition(i,i1);
+                    Console.SetCursorPosition((i+1)*2,(i1+1)*2);
                     Console.Write((int)item);
                 }
             }
+
+            Console.WriteLine();
         }
         public void Play()
         {
             ShowBoard();
-            Console.WriteLine("Make a move");
-            var x = int.Parse(Console.ReadLine());
-            var y = int.Parse(Console.ReadLine());
+            MakeMove();
+        }
+
+        private void MakeMove()
+        {
+            Console.WriteLine($"Player {(int) currentPlayer}'s turn");
+            Console.WriteLine("Make a move (column)");
+            var pass = int.TryParse(Console.ReadLine(), out var x);
+            if (!pass)
+            {
+                Console.WriteLine("Invalid Move!");
+                MakeMove();
+            }
+            Console.WriteLine("Make a move (row)");
+            var pass2 = int.TryParse(Console.ReadLine(), out var y);
+            if (!pass2)
+            {
+                Console.WriteLine("Invalid Move!");
+                MakeMove();
+            }
+
+            if (x > 2 || y > 2 || x < 0 || y < 0)
+            {
+                Console.WriteLine("Invalid Move!");
+                MakeMove();
+            }
+
+            if ( Board[x][y] != Player.None)
+            {
+                Console.WriteLine("Already Taken!");
+                MakeMove();
+            }
 
             Board[x][y] = currentPlayer;
             if (currentPlayer == Player.X) currentPlayer = Player.Y;
